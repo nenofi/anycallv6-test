@@ -5,14 +5,17 @@ pragma solidity ^0.8.4;
 import "hardhat/console.sol";
 
 contract Destination {
-    event NewMsg(string msg);
+
+    uint256 public number = 0;
+
+    event numberUpdated(uint256 number);
 
     function anyExecute(bytes memory _data) external returns (bool success, bytes memory result){
-        (string memory _msg) = abi.decode(_data, (string));  
-        emit NewMsg(_msg);
+        (uint256 _number) = abi.decode(_data, (uint256));
+        number = _number; 
+        emit numberUpdated(number);
         success=true;
         result='';
-
     }
 
 }

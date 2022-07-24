@@ -24,19 +24,20 @@ import "hardhat/console.sol";
 
 contract Source {
     // The Multichain anycall contract on rinkeby 
-    address private anycallcontractrinkeby=0x273a4fFcEb31B8473D51051Ad2a2EdbB7Ac8Ce02;
+    address public anycallcontractrinkeby=0x273a4fFcEb31B8473D51051Ad2a2EdbB7Ac8Ce02;
 
     // Destination contract on Polygon
-    address private receivercontract=0x3E2347a6F93eaC793C56DC508206e397eA11e83D;
+    address public destinationcontract=0x3E2347a6F93eaC793C56DC508206e397eA11e83D;
 
     uint256 public number;
     
     event LogChangeState(uint256 amount);
 
-    function changeFTMState(uint256 _amount) external {
+    function changeFTMState(uint256 _amount) external payable{
+        require(msg.value >= CallProxy(anycallcontractrinkeby).calcSrcFees('0',4002,32));
         emit LogChangeState(_amount);
-        CallProxy(anycallcontractrinkeby).anyCall(
-            receivercontract,
+        CallProxy(anycallcontractrinkeby).anyCall{value: msg.value}(
+            destinationcontract,
 
             // sending the encoded bytes of the string msg and decode on the destination chain
             abi.encode(_amount),
@@ -44,12 +45,17 @@ contract Source {
             // 0x as fallback address because we don't have a fallback function
             address(0),
 
-            // chainid of polygon
+            // chainid of ftm testnet
             4002,
 
             // Using 2 flag to pay fee on destination chain
             2
             );
+    }
+
+    function setDestinationContract(address _destinationcontract) external returns (bool){
+        destinationcontract = _destinationcontract;
+        return true;
     }
 }
 
