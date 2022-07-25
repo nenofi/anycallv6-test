@@ -23,15 +23,15 @@ contract Source {
     // The Multichain anycall contract on rinkeby 
     address public anycallcontractrinkeby=0x273a4fFcEb31B8473D51051Ad2a2EdbB7Ac8Ce02;
 
-    // Destination contract on Polygon
-    address public destinationcontract=0x3E2347a6F93eaC793C56DC508206e397eA11e83D;
+    // Destination contract on FTM test
+    address public destinationcontract=0x6Cc244897eb4D3742397b27Bd2072619872624CF;
 
-    uint256 public number;
+    uint256 public number = 0;
     
     event LogChangeState(uint256 amount);
 
     function changeFTMState(uint256 _amount) external payable{
-        require(msg.value >= CallProxy(anycallcontractrinkeby).calcSrcFees('0',4002,32));
+        require(msg.value >= CallProxy(anycallcontractrinkeby).calcSrcFees('0',4002,32), "INSUFFICIENT FEE");
         emit LogChangeState(_amount);
         CallProxy(anycallcontractrinkeby).anyCall{value: msg.value}(
             destinationcontract,
