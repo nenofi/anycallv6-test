@@ -19,9 +19,6 @@ interface CallProxy{
     
 }
 
-// Import this file to use console.log
-import "hardhat/console.sol";
-
 contract Source {
     // The Multichain anycall contract on rinkeby 
     address public anycallcontractrinkeby=0x273a4fFcEb31B8473D51051Ad2a2EdbB7Ac8Ce02;
