@@ -57,5 +57,9 @@ contract Source {
         destinationcontract = _destinationcontract;
         return true;
     }
+
+    function bridgeFee(uint256 _dataLength) external view returns (uint256){
+        return CallProxy(anycallcontractrinkeby).calcSrcFees('0', 4002, _dataLength);
+    }
 }
 
